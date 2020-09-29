@@ -82,6 +82,25 @@ if [ "$1" = 'redis-cluster' ]; then
     then
       echo "Using old redis-trib.rb to create the cluster"
       echo "yes" | eval ruby /redis/src/redis-trib.rb create --replicas "$SLAVES_PER_MASTER" "$nodes"
+      ##redis低于5.0手动设置密码
+      echo "yes" | eval /redis/src/redis-cli -c -p 7000 CONFIG SET requirepass 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7001 CONFIG SET requirepass 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7002 CONFIG SET requirepass 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7003 CONFIG SET requirepass 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7004 CONFIG SET requirepass 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7005 CONFIG SET requirepass 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7000 -a 123456 CONFIG SET masterauth 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7001 -a 123456 CONFIG SET masterauth 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7002 -a 123456 CONFIG SET masterauth 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7003 -a 123456 CONFIG SET masterauth 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7004 -a 123456 CONFIG SET masterauth 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7005 -a 123456 CONFIG SET masterauth 123456
+      echo "yes" | eval /redis/src/redis-cli -c -p 7000 -a 123456 CONFIG REWRITE
+      echo "yes" | eval /redis/src/redis-cli -c -p 7001 -a 123456 CONFIG REWRITE
+      echo "yes" | eval /redis/src/redis-cli -c -p 7002 -a 123456 CONFIG REWRITE
+      echo "yes" | eval /redis/src/redis-cli -c -p 7003 -a 123456 CONFIG REWRITE
+      echo "yes" | eval /redis/src/redis-cli -c -p 7004 -a 123456 CONFIG REWRITE
+      echo "yes" | eval /redis/src/redis-cli -c -p 7005 -a 123456 CONFIG REWRITE
     else
       echo "Using redis-cli to create the cluster"
       echo "yes" | eval /redis/src/redis-cli --cluster create --cluster-replicas "$SLAVES_PER_MASTER" "$nodes"

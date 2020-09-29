@@ -1,7 +1,17 @@
-bind 0.0.0.0
+#集群配置文件
+#bind 127.0.0.1
+daemonize no
+# 如果搭建redis集群低于5.0,先无密码搭建后，再每个节点创建密码
+#requirepass 123456
+#masterauth 123456
 port ${PORT}
 cluster-enabled yes
 cluster-config-file nodes.conf
 cluster-node-timeout 5000
-appendonly yes
+protected-mode no
+#appendonly yes
 dir /redis-data/${PORT}
+## docker部署机器的内网IP
+cluster-announce-ip 192.168.2.52
+cluster-announce-port ${PORT}
+cluster-announce-bus-port 1${PORT}

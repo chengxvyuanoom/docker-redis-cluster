@@ -1,15 +1,24 @@
-version: '2'
+version: '3.4'
 services:
   redis-cluster:
+    ##可以自行打包redis镜像并在此处指定
+    images: redis-cluster:4
     environment:
+     ## 集群模式IP 0.0.0.0
      IP: ${REDIS_CLUSTER_IP}
+     ##是否打开哨兵模式  "false"
      SENTINEL: ${REDIS_USE_SENTINEL}
+     ##是否打开单机模式  "false"
      STANDALONE: ${REDIS_USE_STANDALONE}
     build:
       context: .
       args:
-        redis_version: '6.0.1'
+        redis_version: '4.0.1'
     hostname: server
     ports:
-      - '7000-7050:7000-7050'
+      ## 集群端口 master 012 slave 453
+      - '7000-7005:7000-7005'
+      ## 哨兵模式端口
       - '5000-5010:5000-5010'
+      ## redis 总线端口，需要暴漏，否则可能redis client无法连接成功
+      - '17000-17005:17000-17005'
